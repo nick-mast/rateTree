@@ -1,0 +1,11 @@
+#Don't track these folders
+old/
+
+#Don't track log or output files
+*.log
+*.out
+
+#Or temporary/swap files
+*~
+*.swp
+*.swo
