@@ -24,7 +24,7 @@
 #include "TCut.h"
 #include "TEventList.h"
 
-bool debug=1;
+bool debug=0;
 
 //Input params are path to a series's rq folder and output file name
 //The parsing is stupid, so don't mess it up!
@@ -223,13 +223,17 @@ for(;iEntry_tail<iEntry_tailNext;iEntry_tail++){tree->Fill();}
 //A second loop to find number of hits
 //  in blocks with fixed number of events
 
-TEventList* elist_WKn=new TEventList("elist_WKn");
-z->Draw(">>elist_WKn","PTOFamps>0.05e-6&&PTOFamps<0.5e-6");//Cut from 50nA to 500 nA
+TEventList* elist_WKn0=new TEventList("elist_WKn0");
+z->Draw(">>elist_WKn0","PTOFamps>0.05e-6&&PTOFamps<0.2e-6");//Cut from 50nA to 200 nA
+TEventList* elist_WKn1=new TEventList("elist_WKn1");
+z->Draw(">>elist_WKn1","PTOFamps>0.05e-6&&PTOFamps<0.5e-6");//Cut from 50nA to 500 nA
 
-double nPTWKmax_50nA500nA_N50=0;//number of ROI events in current 50 event block
+double nPTWKmax_50nA200nA_N50=0;//number of ROI0 events in current 50 event block
+double nPTWKmax_50nA500nA_N50=0;//number of ROI1 events in current 50 event block
 double nPTWKmax_N_N50=0;//actual number of events in current 50 event block. 
 //This should be 50 for all but the last ~50 events in the series
 
+TBranch *bnPTWKmax_50nA200nA_N50 = tree->Branch("nPTWKmax_50nA200nA_N50",&nPTWKmax_50nA200nA_N50,"nPTWKmax_50nA200nA_N50/D");
 TBranch *bnPTWKmax_50nA500nA_N50 = tree->Branch("nPTWKmax_50nA500nA_N50",&nPTWKmax_50nA500nA_N50,"nPTWKmax_50nA500nA_N50/D");
 TBranch *bnPTWKmax_N_N50 = tree->Branch("nPTWKmax_N_N50",&nPTWKmax_N_N50,"nPTWKmax_N_N50/D");
 
@@ -237,7 +241,8 @@ if(debug){cout<<"block tree"<<endl;}
 for(iEntry=0;iEntry<Nentries;iEntry++){
 	tree->GetEntry(iEntry);
 	nPTWKmax_N_N50++;
-	if(elist_WKn->Contains(iEntry)){nPTWKmax_50nA500nA_N50++;}
+	if(elist_WKn0->Contains(iEntry)){nPTWKmax_50nA200nA_N50++;}
+	if(elist_WKn1->Contains(iEntry)){nPTWKmax_50nA500nA_N50++;}
 
 	if(debug){cout<<"iEntry:"<<iEntry<<", "<<nPTWKmax_50nA500nA_N50<<"/"<<nPTWKmax_N_N50<<endl;}
 
@@ -245,9 +250,11 @@ for(iEntry=0;iEntry<Nentries;iEntry++){
 		//At the end of a block, go back and fill entries for the block
 		for(int jEntry=iEntry-49;jEntry<=iEntry;jEntry++){
 			tree->GetEntry(jEntry);
+			bnPTWKmax_50nA200nA_N50->Fill();
 			bnPTWKmax_50nA500nA_N50->Fill();
 			bnPTWKmax_N_N50->Fill();
 		}
+		nPTWKmax_50nA200nA_N50=0;
 		nPTWKmax_50nA500nA_N50=0;
 		nPTWKmax_N_N50=0;
 	}
@@ -258,6 +265,7 @@ if(Nentries%50!=0){
 	for(int jEntry=Nentries-Nentries%50;jEntry<Nentries;jEntry++){
 		if(debug){cout<<"jEntry:"<<jEntry<<", "<<nPTWKmax_50nA500nA_N50<<"/"<<nPTWKmax_N_N50<<endl;}
 		tree->GetEntry(jEntry);
+		bnPTWKmax_50nA200nA_N50->Fill();
 		bnPTWKmax_50nA500nA_N50->Fill();
 		bnPTWKmax_N_N50->Fill();
 	}
