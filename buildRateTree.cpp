@@ -227,47 +227,173 @@ TEventList* elist_WKn0=new TEventList("elist_WKn0");
 z->Draw(">>elist_WKn0","PTOFamps>0.05e-6&&PTOFamps<0.2e-6");//Cut from 50nA to 200 nA
 TEventList* elist_WKn1=new TEventList("elist_WKn1");
 z->Draw(">>elist_WKn1","PTOFamps>0.2e-6&&PTOFamps<0.5e-6");//Cut from 200nA to 500 nA
+TEventList* elist_WKn2=new TEventList("elist_WKn2");
+z->Draw(">>elist_WKn2","PTOFamps>0.5e-6&&PTOFamps<1e-6");//Cut from 500nA to 1 uA
 
+//N=50
 double nPTWKmax_50nA200nA_N50=0;//number of ROI0 events in current 50 event block
 double nPTWKmax_200nA500nA_N50=0;//number of ROI1 events in current 50 event block
+double nPTWKmax_500nA1uA_N50=0;//number of ROI2 events in current 50 event block
 double nPTWKmax_N_N50=0;//actual number of events in current 50 event block. 
 //This should be 50 for all but the last ~50 events in the series
+//N=100
+double nPTWKmax_50nA200nA_N100=0;//number of ROI0 events in current 100 event block
+double nPTWKmax_200nA500nA_N100=0;//number of ROI1 events in current 100 event block
+double nPTWKmax_500nA1uA_N100=0;//number of ROI2 events in current 100 event block
+double nPTWKmax_N_N100=0;//actual number of events in current 100 event block. 
+//This should be 100 for all but the last ~100 events in the series
+//N=500
+double nPTWKmax_50nA200nA_N500=0;//number of ROI0 events in current 500 event block
+double nPTWKmax_200nA500nA_N500=0;//number of ROI1 events in current 500 event block
+double nPTWKmax_500nA1uA_N500=0;//number of ROI2 events in current 500 event block
+double nPTWKmax_N_N500=0;//actual number of events in current 500 event block. 
+//This should be 500 for all but the last ~500 events in the series
+
 
 TBranch *bnPTWKmax_50nA200nA_N50 = tree->Branch("nPTWKmax_50nA200nA_N50",&nPTWKmax_50nA200nA_N50,"nPTWKmax_50nA200nA_N50/D");
 TBranch *bnPTWKmax_200nA500nA_N50 = tree->Branch("nPTWKmax_200nA500nA_N50",&nPTWKmax_200nA500nA_N50,"nPTWKmax_200nA500nA_N50/D");
+TBranch *bnPTWKmax_500nA1uA_N50 = tree->Branch("nPTWKmax_500nA1uA_N50",&nPTWKmax_500nA1uA_N50,"nPTWKmax_500nA1uA_N50/D");
 TBranch *bnPTWKmax_N_N50 = tree->Branch("nPTWKmax_N_N50",&nPTWKmax_N_N50,"nPTWKmax_N_N50/D");
+
+TBranch *bnPTWKmax_50nA200nA_N100 = tree->Branch("nPTWKmax_50nA200nA_N100",&nPTWKmax_50nA200nA_N100,"nPTWKmax_50nA200nA_N100/D");
+TBranch *bnPTWKmax_200nA500nA_N100 = tree->Branch("nPTWKmax_200nA500nA_N100",&nPTWKmax_200nA500nA_N100,"nPTWKmax_200nA500nA_N100/D");
+TBranch *bnPTWKmax_500nA1uA_N100 = tree->Branch("nPTWKmax_500nA1uA_N100",&nPTWKmax_500nA1uA_N100,"nPTWKmax_500nA1uA_N100/D");
+TBranch *bnPTWKmax_N_N100 = tree->Branch("nPTWKmax_N_N100",&nPTWKmax_N_N100,"nPTWKmax_N_N100/D");
+
+TBranch *bnPTWKmax_50nA200nA_N500 = tree->Branch("nPTWKmax_50nA200nA_N500",&nPTWKmax_50nA200nA_N500,"nPTWKmax_50nA200nA_N500/D");
+TBranch *bnPTWKmax_200nA500nA_N500 = tree->Branch("nPTWKmax_200nA500nA_N500",&nPTWKmax_200nA500nA_N500,"nPTWKmax_200nA500nA_N500/D");
+TBranch *bnPTWKmax_500nA1uA_N500 = tree->Branch("nPTWKmax_500nA1uA_N500",&nPTWKmax_500nA1uA_N500,"nPTWKmax_500nA1uA_N500/D");
+TBranch *bnPTWKmax_N_N500 = tree->Branch("nPTWKmax_N_N500",&nPTWKmax_N_N500,"nPTWKmax_N_N500/D");
 
 if(debug){cout<<"block tree"<<endl;}
 for(iEntry=0;iEntry<Nentries;iEntry++){
 	tree->GetEntry(iEntry);
+	//Increment block counters
 	nPTWKmax_N_N50++;
-	if(elist_WKn0->Contains(iEntry)){nPTWKmax_50nA200nA_N50++;}
-	if(elist_WKn1->Contains(iEntry)){nPTWKmax_200nA500nA_N50++;}
+	nPTWKmax_N_N100++;
+	nPTWKmax_N_N500++;
+	//Increment ROI counters
+	if(elist_WKn0->Contains(iEntry)){
+		nPTWKmax_50nA200nA_N50++;
+		nPTWKmax_50nA200nA_N100++;
+		nPTWKmax_50nA200nA_N500++;
+	}
+	if(elist_WKn1->Contains(iEntry)){
+		nPTWKmax_200nA500nA_N50++;
+		nPTWKmax_200nA500nA_N100++;
+		nPTWKmax_200nA500nA_N500++;
+	}
+	if(elist_WKn2->Contains(iEntry)){
+		nPTWKmax_500nA1uA_N50++;
+		nPTWKmax_500nA1uA_N100++;
+		nPTWKmax_500nA1uA_N500++;
+	}
 
-	if(debug){cout<<"iEntry:"<<iEntry<<", "<<nPTWKmax_200nA500nA_N50<<"/"<<nPTWKmax_N_N50<<endl;}
+	if(debug){
+		cout<<"iEntry:"<<iEntry<<", "<<nPTWKmax_200nA500nA_N50<<"/"<<nPTWKmax_N_N50;
+		cout<<", "<<nPTWKmax_200nA500nA_N100<<"/"<<nPTWKmax_N_N100;
+		cout<<", "<<nPTWKmax_200nA500nA_N500<<"/"<<nPTWKmax_N_N500<<endl;
+	}
 
-	if((iEntry+1)%50==0){
-		//At the end of a block, go back and fill entries for the block
+	//Handle the end of each block
+
+	//NOTE! These blocks must be handled in order of increasing size
+	//because moving back and forth in the tree can overwrite variables 
+	//in memory with their values somewhere in the tree
+	//That's also why the counts only get reset after handling the writing of all blocks
+
+	//End of a 50 block
+	if(nPTWKmax_N_N50==50){
+		//At the end of a 50 block, go back and fill entries for the block
 		for(int jEntry=iEntry-49;jEntry<=iEntry;jEntry++){
 			tree->GetEntry(jEntry);
 			bnPTWKmax_50nA200nA_N50->Fill();
 			bnPTWKmax_200nA500nA_N50->Fill();
+			bnPTWKmax_500nA1uA_N50->Fill();
 			bnPTWKmax_N_N50->Fill();
 		}
+		//Counters reset below
+	}
+
+	//End of a 100 block
+	if(nPTWKmax_N_N100==100){
+		for(int jEntry=iEntry-99;jEntry<=iEntry;jEntry++){
+			tree->GetEntry(jEntry);
+			bnPTWKmax_50nA200nA_N100->Fill();
+			bnPTWKmax_200nA500nA_N100->Fill();
+			bnPTWKmax_500nA1uA_N100->Fill();
+			bnPTWKmax_N_N100->Fill();
+		}
+		//Counters reset below
+	}
+
+	//End of a 500 block
+	if(nPTWKmax_N_N500==500){
+		//At the end of a 500 block, go back and fill entries for the block
+		for(int jEntry=iEntry-499;jEntry<=iEntry;jEntry++){
+			tree->GetEntry(jEntry);
+			bnPTWKmax_50nA200nA_N500->Fill();
+			bnPTWKmax_200nA500nA_N500->Fill();
+			bnPTWKmax_500nA1uA_N500->Fill();
+			bnPTWKmax_N_N500->Fill();
+		}
+	}
+
+
+
+	//Reset counters
+	if(nPTWKmax_N_N50==50){
 		nPTWKmax_50nA200nA_N50=0;
 		nPTWKmax_200nA500nA_N50=0;
+		nPTWKmax_500nA1uA_N50=0;
 		nPTWKmax_N_N50=0;
 	}
+	if(nPTWKmax_N_N100==100){
+		nPTWKmax_50nA200nA_N100=0;
+		nPTWKmax_200nA500nA_N100=0;
+		nPTWKmax_500nA1uA_N100=0;
+		nPTWKmax_N_N100=0;
+	}
+	if(nPTWKmax_N_N500==500){
+		nPTWKmax_50nA200nA_N500=0;
+		nPTWKmax_200nA500nA_N500=0;
+		nPTWKmax_500nA1uA_N500=0;
+		nPTWKmax_N_N500=0;
+	}
+
 }
 if(debug){cout<<"iEntry:"<<iEntry<<", "<<nPTWKmax_200nA500nA_N50<<"/"<<nPTWKmax_N_N50<<endl;}
+
 //Still need to do the last <50 events if Nentries%50!=0 
+//last N<50
 if(Nentries%50!=0){
 	for(int jEntry=Nentries-Nentries%50;jEntry<Nentries;jEntry++){
 		if(debug){cout<<"jEntry:"<<jEntry<<", "<<nPTWKmax_200nA500nA_N50<<"/"<<nPTWKmax_N_N50<<endl;}
 		tree->GetEntry(jEntry);
 		bnPTWKmax_50nA200nA_N50->Fill();
 		bnPTWKmax_200nA500nA_N50->Fill();
+		bnPTWKmax_500nA1uA_N50->Fill();
 		bnPTWKmax_N_N50->Fill();
+	}
+}
+//last N<100
+if(Nentries%100!=0){
+	for(int jEntry=Nentries-Nentries%100;jEntry<Nentries;jEntry++){
+		tree->GetEntry(jEntry);
+		bnPTWKmax_50nA200nA_N100->Fill();
+		bnPTWKmax_200nA500nA_N100->Fill();
+		bnPTWKmax_500nA1uA_N100->Fill();
+		bnPTWKmax_N_N100->Fill();
+	}
+}
+//last N<500
+if(Nentries%500!=0){
+	for(int jEntry=Nentries-Nentries%500;jEntry<Nentries;jEntry++){
+		tree->GetEntry(jEntry);
+		bnPTWKmax_50nA200nA_N500->Fill();
+		bnPTWKmax_200nA500nA_N500->Fill();
+		bnPTWKmax_500nA1uA_N500->Fill();
+		bnPTWKmax_N_N500->Fill();
 	}
 }
 
