@@ -224,11 +224,11 @@ for(;iEntry_tail<iEntry_tailNext;iEntry_tail++){tree->Fill();}
 //  in blocks with fixed number of events
 
 TEventList* elist_WKn0=new TEventList("elist_WKn0");
-z->Draw(">>elist_WKn0","PTOFamps>0.05e-6&&PTOFamps<0.2e-6");//Cut from 50nA to 200 nA
+z->Draw(">>elist_WKn0","PTWKmax>0.05e-6&&PTWKmax<0.2e-6");//Cut from 50nA to 200 nA
 TEventList* elist_WKn1=new TEventList("elist_WKn1");
-z->Draw(">>elist_WKn1","PTOFamps>0.2e-6&&PTOFamps<0.5e-6");//Cut from 200nA to 500 nA
+z->Draw(">>elist_WKn1","PTWKmax>0.2e-6&&PTWKmax<0.5e-6");//Cut from 200nA to 500 nA
 TEventList* elist_WKn2=new TEventList("elist_WKn2");
-z->Draw(">>elist_WKn2","PTOFamps>0.5e-6&&PTOFamps<1e-6");//Cut from 500nA to 1 uA
+z->Draw(">>elist_WKn2","PTWKmax>0.5e-6&&PTWKmax<1e-6");//Cut from 500nA to 1 uA
 
 //N=50
 double nPTWKmax_50nA200nA_N50=0;//number of ROI0 events in current 50 event block
